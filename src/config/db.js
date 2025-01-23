@@ -1,17 +1,19 @@
 // config/db.js
-const { Pool } = require('pg');
+const { Sequelize } = require('sequelize');
 
-const pool = new Pool({
-  user: process.env.DB_USER,
+const sequelize = new Sequelize({
+  dialect: 'postgres',
   host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
+  username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   port: process.env.DB_PORT || 5432,
+  logging: false,
 });
 
 const connectDB = async () => {
   try {
-    await pool.connect();
+    await sequelize.authenticate();
     console.log('PostgreSQL Connected');
   } catch (error) {
     console.error('Error connecting to PostgreSQL:', error.message);
@@ -19,4 +21,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = { pool, connectDB };
+module.exports = { sequelize, connectDB };
