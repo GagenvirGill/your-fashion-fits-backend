@@ -1,14 +1,14 @@
-// contollers/categoryController.js
-const { Category } = require('../models/index.js');
+// contollers/itemController.js
+const { Item } = require('../models/index.js');
 
-exports.getAllCategories = async (req, res) => {
+exports.getAllItems = async (req, res) => {
     try {
-        const categories = await Category.findAll();
-        console.log(`Retrieved ${categories.length} Categories`);
+        const items = await Item.findAll();
+        console.log(`Retrieved ${items.length} Items`);
         res.status(200).json({
             success: true,
-            message: `Retrieved ${categories.length} Categories`,
-            data: categories
+            message: `Retrieved ${items.length} Items`,
+            data: items
         });
     } catch (error) {
         console.error(error.message);
@@ -19,19 +19,19 @@ exports.getAllCategories = async (req, res) => {
     }
 };
 
-exports.createCategory = async (req, res) => {
-    const { name, description } = req.body;
+exports.createItem = async (req, res) => {
+    const { image, description } = req.body;
 
     try {
-        const category = await Category.create({ 
-            name: name, 
+        const item = await Item.create({ 
+            image: image, 
             description: description,
         });
-        console.log(`Category with name: ${name} successfully created`);
+        console.log(`Item successfully created`);
         res.status(201).json({
             success: true,
-            message: `Category with name: ${name} successfully created`,
-            data: category,
+            message: `Item successfully created`,
+            data: item,
         });
     } catch (error) {
         console.error(error.message);
@@ -44,26 +44,26 @@ exports.createCategory = async (req, res) => {
 
 // bulk create
 
-exports.deleteCategory = async (req, res) => {
-    const { categoryId } = req.params;
+exports.deleteItem = async (req, res) => {
+    const { itemId } = req.params;
 
     try {
-        const numAffectedRows = await Category.destroy({ 
+        const numAffectedRows = await Item.destroy({ 
             where: { 
-                categoryId: categoryId 
+                itemId: itemId 
             }
         });
-        console.log(`Category successfully deleted`);
+        console.log(`Item successfully deleted`);
 
         if (numAffectedRows > 0) {
             res.status(200).json({
                 success: true,
-                message: `Category successfully deleted`,
+                message: `Item successfully deleted`,
             });
         } else {
             res.status(404).json({
                 success: false,
-                message: `Category not found`,
+                message: `Item not found`,
             });
         }
     } catch (error) {
