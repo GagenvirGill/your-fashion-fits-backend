@@ -1,0 +1,16 @@
+# Logs
+logs
+*.log
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Testing coverage reports
+coverage/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
