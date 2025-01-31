@@ -42,8 +42,6 @@ exports.createCategory = async (req, res) => {
     }
 };
 
-// bulk create
-
 exports.deleteCategory = async (req, res) => {
     const { categoryId } = req.params;
 
@@ -75,4 +73,12 @@ exports.deleteCategory = async (req, res) => {
     }
 }
 
-// update
+// bulk create
+
+// update a category
+
+// bulk add items to a category
+
+// bulk remove items from a category
+
+// the cascade stuff for the many to many, both on update and on delete

@@ -8,8 +8,8 @@ const Item = sequelize.define('Item', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
-    image: {
-        type: DataTypes.BLOB,
+    imagePath: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
     description: {

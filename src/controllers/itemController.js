@@ -20,11 +20,15 @@ exports.getAllItems = async (req, res) => {
 };
 
 exports.createItem = async (req, res) => {
-    const { image, description } = req.body;
+    const { description } = req.body;
+    let imgPath = null;
+    if (req.file) {
+        imgPath = `/uploads/${req.file.filename}`;
+    }
 
     try {
         const item = await Item.create({ 
-            image: image, 
+            imagePath: imgPath,
             description: description,
         });
         console.log(`Item successfully created`);
@@ -41,8 +45,6 @@ exports.createItem = async (req, res) => {
         });
     }
 };
-
-// bulk create
 
 exports.deleteItem = async (req, res) => {
     const { itemId } = req.params;
@@ -75,4 +77,12 @@ exports.deleteItem = async (req, res) => {
     }
 }
 
-// update
+// bulk create
+
+// update an item
+
+// bulk add categories to an item
+
+// bulk update an items categories (remove all the current categories and add the ones in the body)
+
+// the cascade stuff for the many to many, both on update and on delete
