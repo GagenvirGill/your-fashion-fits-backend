@@ -2,13 +2,14 @@
 require('dotenv').config();
 const { sequelize, connectDB } = require('./config/db');
 const app = require('./app');
-require('./models/index.js')
+const modelSetup = require('./models/index.js');
 
 const PORT = process.env.PORT || 5001;
 
 const startServer = async () => {
   try {
     await connectDB();
+    modelSetup(sequelize);
     await sequelize.sync({ alter: true });
 
     console.log('Database synced successfully.');

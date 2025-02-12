@@ -1,30 +1,34 @@
 // models/index.js
-const Item = require('./item.js');
-const Category = require('./category.js');
-const Outfit = require('./outfit.js');
+const itemModel = require('./item.js');
+const categoryModel = require('./category.js');
+const outfitModel = require('./outfit.js');
 
-Item.belongsToMany(Category, {
-    through: 'ItemHasCategory',
-});
+module.exports = (sequelizeInst) => {
+    const Item = itemModel(sequelizeInst);
+    const Category = categoryModel(sequelizeInst);
+    const Outfit = outfitModel(sequelizeInst);
 
-Item.belongsToMany(Outfit, {
-    through: 'OutfitHasItem',
-});
+    Item.belongsToMany(Category, {
+        through: 'ItemHasCategory',
+    });
 
-Category.belongsToMany(Item, {
-    through: 'ItemHasCategory',
-});
+    Item.belongsToMany(Outfit, {
+        through: 'OutfitHasItem',
+    });
 
-Category.belongsToMany(Outfit, {
-    through: 'OutfitHasCategory',
-});
+    Category.belongsToMany(Item, {
+        through: 'ItemHasCategory',
+    });
 
-Outfit.belongsToMany(Item, {
-    through: 'OutfitHasItem',
-});
+    Category.belongsToMany(Outfit, {
+        through: 'OutfitHasCategory',
+    });
 
-Outfit.belongsToMany(Category, {
-    through: 'OutfitHasCategory',
-});
+    Outfit.belongsToMany(Item, {
+        through: 'OutfitHasItem',
+    });
 
-module.exports = { Item, Category, Outfit}
+    Outfit.belongsToMany(Category, {
+        through: 'OutfitHasCategory',
+    });
+};

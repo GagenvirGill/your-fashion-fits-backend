@@ -1,5 +1,5 @@
 // contollers/itemController.js
-const { Item } = require('../models/index.js');
+const { Item, Category } = require('../models/index.js');
 
 exports.getAllItems = async (req, res) => {
     try {
@@ -68,6 +68,126 @@ exports.deleteItem = async (req, res) => {
                 message: `Item not found`,
             });
         }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+exports.getItemsCategories = async (req, res) => {
+    const { itemId } = req.params;
+
+    try {
+        const item = await Item.findOne({ 
+            where: { 
+                itemId: itemId 
+            },
+            include: Category
+        });
+
+        if (item) {
+            console.log(`Items Categories retrieved successfully`);
+
+            res.status(200).json({
+                success: true,
+                message: `Retrieved ${item.categories.length} Categories for Item`,
+                data:item.categories,
+            });
+        } else {
+            console.log(`Item not found`);
+
+            res.status(404).json({
+                success: false,
+                message: `Item not found`,
+            });
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+exports.addItemToCategories = async (req, res) => {
+    const { itemId } = req.params;
+    const { categoryIDs } = req.body
+
+    try {
+        const item = await Item.findByPk(itemId);
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: `Item not found`,
+            });
+        }
+
+        const categories = await Category.findAll({ 
+            where: { 
+                categoryId: categoryIDs 
+            },
+        });
+        if (categories.length < 1) {
+            return res.status(404).json({
+                success: false,
+                message: `Categories not found`,
+            });
+        }
+
+        for (const category of categories) {
+            await item.addCategory(category);
+        }
+        console.log(`Item successfully added to ${categories.length} Categories`);
+        res.status(200).json({
+            success: true,
+            message: `Item successfully added to ${categories.length} Categories`,
+        });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+exports.removeItemFromCategories = async (req, res) => {
+    const { itemId } = req.params;
+    const { categoryIDs } = req.body
+
+    try {
+        const item = await Item.findByPk(itemId);
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: `Item not found`,
+            });
+        }
+
+        const categories = await Category.findAll({ 
+            where: { 
+                categoryId: categoryIDs 
+            },
+        });
+        if (categories.length < 1) {
+            return res.status(404).json({
+                success: false,
+                message: `Categories not found`,
+            });
+        }
+
+        for (const category of categories) {
+            await item.removeCategory(category);
+        }
+        console.log(`Item successfully deleted from ${categories.length} Categories`);
+        res.status(200).json({
+            success: true,
+            message: `Item successfully deleted from ${categories.length} Categories`,
+        });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({
