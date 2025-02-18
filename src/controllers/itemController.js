@@ -1,16 +1,43 @@
 // src/contollers/itemController.js
 import Item from "../models/item.js";
 import Category from "../models/category.js";
+import { Op } from "sequelize";
 
 export const getAllItems = async (req, res) => {
 	try {
-		const items = await Item.findAll();
-		console.log(`Retrieved ${items.length} Items`);
-		res.status(200).json({
-			success: true,
-			message: `Retrieved ${items.length} Items`,
-			data: items,
-		});
+		const { categories } = req.query;
+
+		if (!categories || categories.length === 0) {
+			const items = await Item.findAll();
+			console.log(`Retrieved ${items.length} Items`);
+
+			res.status(200).json({
+				success: true,
+				message: `Retrieved ${items.length} Items`,
+				data: items,
+			});
+		} else {
+			const items = await Item.findAll({
+				include: {
+					model: Category,
+					where: {
+						categoryId: {
+							[Op.in]: categories,
+						},
+					},
+					through: {
+						attributes: [],
+					},
+				},
+			});
+			console.log(`Retrieved ${items.length} Filtered Items`);
+
+			res.status(200).json({
+				success: true,
+				message: `Retrieved ${items.length} Filtered Items`,
+				data: items,
+			});
+		}
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).json({
@@ -53,7 +80,9 @@ export const deleteItem = async (req, res) => {
 	try {
 		const numAffectedRows = await Item.destroy({
 			where: {
-				itemId: itemId,
+				itemId: {
+					[Op.eq]: itemId,
+				},
 			},
 		});
 		console.log(`Item successfully deleted`);
@@ -84,7 +113,9 @@ export const getItemsCategories = async (req, res) => {
 	try {
 		const item = await Item.findOne({
 			where: {
-				itemId: itemId,
+				itemId: {
+					[Op.eq]: itemId,
+				},
 			},
 			include: Category,
 		});
@@ -129,7 +160,9 @@ export const addItemToCategories = async (req, res) => {
 
 		const categories = await Category.findAll({
 			where: {
-				categoryId: categoryIDs,
+				categoryId: {
+					[Op.in]: categoryIDs,
+				},
 			},
 		});
 		if (categories.length < 1) {
@@ -173,7 +206,9 @@ export const removeItemFromCategories = async (req, res) => {
 
 		const categories = await Category.findAll({
 			where: {
-				categoryId: categoryIDs,
+				categoryId: {
+					[Op.in]: categoryIDs,
+				},
 			},
 		});
 		if (categories.length < 1) {
@@ -203,8 +238,6 @@ export const removeItemFromCategories = async (req, res) => {
 };
 
 // bulk create
-
-// update an item
 
 // bulk add categories to an item
 
