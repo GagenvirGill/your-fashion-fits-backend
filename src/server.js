@@ -1,27 +1,25 @@
-// server.js
-require('dotenv').config();
-const { sequelize, connectDB } = require('./config/db');
-const app = require('./app');
-const modelSetup = require('./models/index.js');
-
-const PORT = process.env.PORT || 5001;
+// src/server.js
+import app from "./app.js";
+import sequelize from "./config/db.js";
+import envConfig from "./config/envConfig.js";
+import "./models/index.js";
 
 const startServer = async () => {
-  try {
-    await connectDB();
-    modelSetup(sequelize);
-    await sequelize.sync({ alter: true });
+	try {
+		console.log("Models Created, starting Sequelize Sync");
+		await sequelize.sync({ alter: true });
+		console.log("Sequelize Sync Successful");
+		console.log("Registered models:", Object.keys(sequelize.models));
 
-    console.log('Database synced successfully.');
-    console.log('Registered models:', Object.keys(sequelize.models));
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error('Failed to start server:', error.message);
-    process.exit(1);
-  }
+		app.listen(envConfig.serverPort, () => {
+			console.log(
+				`Server is running on http://localhost:${envConfig.serverPort}`
+			);
+		});
+	} catch (error) {
+		console.error("Failed to start server:", error.message);
+		process.exit(1);
+	}
 };
 
 startServer();

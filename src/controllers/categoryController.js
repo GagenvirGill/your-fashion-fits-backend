@@ -1,77 +1,77 @@
-// contollers/categoryController.js
-const { Category } = require('../models/index.js');
+// src/contollers/categoryController.js
+import Category from "../models/category.js";
 
-exports.getAllCategories = async (req, res) => {
-    try {
-        const categories = await Category.findAll();
-        console.log(`Retrieved ${categories.length} Categories`);
-        res.status(200).json({
-            success: true,
-            message: `Retrieved ${categories.length} Categories`,
-            data: categories
-        });
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+export const getAllCategories = async (req, res) => {
+	try {
+		const categories = await Category.findAll();
+		console.log(`Retrieved ${categories.length} Categories`);
+		res.status(200).json({
+			success: true,
+			message: `Retrieved ${categories.length} Categories`,
+			data: categories,
+		});
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
 };
 
-exports.createCategory = async (req, res) => {
-    const { name, description } = req.body;
+export const createCategory = async (req, res) => {
+	const { name, description } = req.body;
 
-    try {
-        const category = await Category.create({ 
-            name: name, 
-            description: description,
-        });
-        console.log(`Category with name: ${name} successfully created`);
-        res.status(201).json({
-            success: true,
-            message: `Category with name: ${name} successfully created`,
-            data: category,
-        });
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+	try {
+		const category = await Category.create({
+			name: name,
+			description: description,
+		});
+		console.log(`Category with name: ${name} successfully created`);
+		res.status(201).json({
+			success: true,
+			message: `Category with name: ${name} successfully created`,
+			data: category,
+		});
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
 };
 
-exports.deleteCategory = async (req, res) => {
-    const { categoryId } = req.params;
+export const deleteCategory = async (req, res) => {
+	const { categoryId } = req.params;
 
-    try {
-        const numAffectedRows = await Category.destroy({ 
-            where: { 
-                categoryId: categoryId 
-            }
-        });
-        console.log(`Category successfully deleted`);
+	try {
+		const numAffectedRows = await Category.destroy({
+			where: {
+				categoryId: categoryId,
+			},
+		});
+		console.log(`Category successfully deleted`);
 
-        if (numAffectedRows > 0) {
-            res.status(200).json({
-                success: true,
-                message: `Category successfully deleted`,
-            });
-        } else {
-            res.status(404).json({
-                success: false,
-                message: `Category not found`,
-            });
-        }
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-}
+		if (numAffectedRows > 0) {
+			res.status(200).json({
+				success: true,
+				message: `Category successfully deleted`,
+			});
+		} else {
+			res.status(404).json({
+				success: false,
+				message: `Category not found`,
+			});
+		}
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
+};
 
 // bulk create
 

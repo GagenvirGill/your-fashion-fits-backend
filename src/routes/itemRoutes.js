@@ -1,35 +1,23 @@
-// routes/itemRoutes.js
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
+// src/routes/itemRoutes.js
+import { Router } from "express";
+import {
+	getAllItems,
+	createItem,
+	deleteItem,
+	getItemsCategories,
+	addItemToCategories,
+	removeItemFromCategories,
+} from "../controllers/itemController.js";
+import upload from "../middleware/multerFileUpload.js";
 
-const itemController = require('../controllers/itemController.js');
+const router = Router();
 
-const uploadFolder = './uploads';
+router.get("/", getAllItems);
+router.post("/", upload.single("image"), createItem);
+router.delete("/:itemId", deleteItem);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadFolder);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-  
-const upload = multer({ 
-  storage: storage, 
-  limits: { fileSize: 50 * 1024 * 1024 } 
-});
+router.get("/:itemId/categories", getItemsCategories);
+router.post("/:itemId/categories", addItemToCategories);
+router.delete("/:itemId/categories", removeItemFromCategories);
 
-const router = express.Router();
-
-router.get('/', itemController.getAllItems);
-router.post('/', upload.single('image'), itemController.createItem);
-router.delete('/:itemId', itemController.deleteItem);
-
-router.get('/:itemId/categories', itemController.getItemsCategories);
-router.post('/:itemId/categories', itemController.addItemToCategories);
-router.delete('/:itemId/categories', itemController.removeItemFromCategories);
-
-module.exports = router;
+export default router;
