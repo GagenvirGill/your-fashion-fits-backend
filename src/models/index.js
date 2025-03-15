@@ -1,6 +1,6 @@
 // src/models/index.js
-import Category from "./category.js";
 import Item from "./item.js";
+import Category from "./category.js";
 import Outfit from "./outfit.js";
 
 Item.belongsToMany(Category, {

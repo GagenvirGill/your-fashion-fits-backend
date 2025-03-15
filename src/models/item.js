@@ -12,10 +12,6 @@ const Item = sequelize.define("Item", {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
-	description: {
-		type: DataTypes.TEXT,
-		allowNull: true,
-	},
 });
 
 export default Item;

@@ -16,10 +16,6 @@ const Outfit = sequelize.define("Outfit", {
 		type: DataTypes.BLOB,
 		allowNull: true,
 	},
-	description: {
-		type: DataTypes.TEXT,
-		allowNull: true,
-	},
 });
 
 export default Outfit;

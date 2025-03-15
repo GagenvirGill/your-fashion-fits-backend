@@ -12,9 +12,13 @@ const Category = sequelize.define("Category", {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
-	description: {
-		type: DataTypes.TEXT,
+	favoriteItem: {
+		type: DataTypes.UUID,
 		allowNull: true,
+		references: {
+			model: "Items",
+			key: "itemId",
+		},
 	},
 });
 
