@@ -113,14 +113,12 @@ export const getItemsCategories = async (req, res) => {
 	try {
 		const item = await Item.findOne({
 			where: {
-				itemId: {
-					[Op.eq]: itemId,
-				},
+				itemId: itemId,
 			},
 			include: Category,
 		});
 
-		if (item) {
+		if (item.categories) {
 			console.log(`Items Categories retrieved successfully`);
 
 			res.status(200).json({
@@ -129,11 +127,11 @@ export const getItemsCategories = async (req, res) => {
 				data: item.categories,
 			});
 		} else {
-			console.log(`Item not found`);
+			console.log(`No Categories Exist for that Item`);
 
 			res.status(404).json({
 				success: false,
-				message: `Item not found`,
+				message: `No Categories Exist for that Item`,
 			});
 		}
 	} catch (error) {
@@ -147,7 +145,7 @@ export const getItemsCategories = async (req, res) => {
 
 export const addItemToCategories = async (req, res) => {
 	const { itemId } = req.params;
-	const { categoryIDs } = req.body;
+	const { categories } = req.body;
 
 	try {
 		const item = await Item.findByPk(itemId);
@@ -158,29 +156,30 @@ export const addItemToCategories = async (req, res) => {
 			});
 		}
 
-		const categories = await Category.findAll({
+		const foundCategories = await Category.findAll({
 			where: {
 				categoryId: {
-					[Op.in]: categoryIDs,
+					[Op.in]: categories,
 				},
 			},
 		});
-		if (categories.length < 1) {
+
+		if (foundCategories.length < 1) {
 			return res.status(404).json({
 				success: false,
 				message: `Categories not found`,
 			});
 		}
 
-		for (const category of categories) {
+		for (const category of foundCategories) {
 			await item.addCategory(category);
 		}
 		console.log(
-			`Item successfully added to ${categories.length} Categories`
+			`Item successfully added to ${foundCategories.length} Categories`
 		);
 		res.status(200).json({
 			success: true,
-			message: `Item successfully added to ${categories.length} Categories`,
+			message: `Item successfully added to ${foundCategories.length} Categories`,
 		});
 	} catch (error) {
 		console.error(error.message);
