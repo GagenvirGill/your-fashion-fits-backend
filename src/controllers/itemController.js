@@ -115,16 +115,19 @@ export const getItemsCategories = async (req, res) => {
 			where: {
 				itemId: itemId,
 			},
-			include: Category,
+			include: {
+				model: Category,
+				as: "Categories",
+			},
 		});
 
-		if (item.categories) {
+		if (item && item.Categories) {
 			console.log(`Items Categories retrieved successfully`);
 
 			res.status(200).json({
 				success: true,
-				message: `Retrieved ${item.categories.length} Categories for Item`,
-				data: item.categories,
+				message: `Retrieved ${item.Categories.length} Categories for Item`,
+				data: item.Categories,
 			});
 		} else {
 			console.log(`No Categories Exist for that Item`);
@@ -192,8 +195,8 @@ export const addItemToCategories = async (req, res) => {
 
 export const removeItemFromCategories = async (req, res) => {
 	const { itemId } = req.params;
-	const { categoryIDs } = req.body;
-
+	const { categories } = req.body;
+	console.log(req.body);
 	try {
 		const item = await Item.findByPk(itemId);
 		if (!item) {
@@ -203,29 +206,30 @@ export const removeItemFromCategories = async (req, res) => {
 			});
 		}
 
-		const categories = await Category.findAll({
+		const foundCategories = await Category.findAll({
 			where: {
 				categoryId: {
-					[Op.in]: categoryIDs,
+					[Op.in]: categories,
 				},
 			},
 		});
-		if (categories.length < 1) {
+
+		if (foundCategories.length < 1) {
 			return res.status(404).json({
 				success: false,
 				message: `Categories not found`,
 			});
 		}
 
-		for (const category of categories) {
+		for (const category of foundCategories) {
 			await item.removeCategory(category);
 		}
 		console.log(
-			`Item successfully deleted from ${categories.length} Categories`
+			`Item successfully deleted from ${foundCategories.length} Categories`
 		);
 		res.status(200).json({
 			success: true,
-			message: `Item successfully deleted from ${categories.length} Categories`,
+			message: `Item successfully deleted from ${foundCategories.length} Categories`,
 		});
 	} catch (error) {
 		console.error(error.message);
