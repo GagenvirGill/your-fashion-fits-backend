@@ -236,10 +236,4 @@ export const removeItemFromCategories = async (req, res) => {
 	}
 };
 
-// bulk create
-
-// bulk add categories to an item
-
-// bulk update an items categories (remove all the current categories and add the ones in the body)
-
 // the cascade stuff for the many to many, both on update and on delete
