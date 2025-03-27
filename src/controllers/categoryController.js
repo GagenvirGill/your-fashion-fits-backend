@@ -169,7 +169,7 @@ export const removeCategoryFromItems = async (req, res) => {
 };
 
 export const setCategoriesFavItem = async (req, res) => {
-	const { categoryI, itemId } = req.params;
+	const { categoryId, itemId } = req.params;
 
 	try {
 		const category = await Category.findByPk(categoryId);
