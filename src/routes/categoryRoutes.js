@@ -6,6 +6,7 @@ import {
 	deleteCategory,
 	addCategoryToItems,
 	removeCategoryFromItems,
+	setCategoriesFavItem,
 } from "../controllers/categoryController.js";
 
 const router = Router();
@@ -16,5 +17,7 @@ router.delete("/:categoryId", deleteCategory);
 
 router.post("/:categoryId/items", addCategoryToItems);
 router.delete("/:categoryId/items", removeCategoryFromItems);
+
+router.post("/:categoryId/fav-item", setCategoriesFavItem);
 
 export default router;

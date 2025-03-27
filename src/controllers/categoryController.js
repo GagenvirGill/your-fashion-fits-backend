@@ -124,7 +124,7 @@ export const addCategoryToItems = async (req, res) => {
 
 export const removeCategoryFromItems = async (req, res) => {
 	const { categoryId } = req.params;
-	const { itemIds } = req.body;
+	const { items } = req.body;
 
 	try {
 		const category = await Category.findByPk(categoryId);
@@ -135,27 +135,67 @@ export const removeCategoryFromItems = async (req, res) => {
 			});
 		}
 
-		const items = await Item.findAll({
+		const filtItems = await Item.findAll({
 			where: {
 				itemId: {
-					[Op.in]: itemIds,
+					[Op.in]: items,
 				},
 			},
 		});
-		if (items.length < 1) {
+		if (filtItems.length < 1) {
 			return res.status(404).json({
 				success: false,
 				message: `Items not found`,
 			});
 		}
 
-		for (const item of items) {
+		for (const item of filtItems) {
 			await category.removeItem(item);
 		}
-		console.log(`Category successfully deleted from ${items.length} Items`);
+		console.log(
+			`Category successfully deleted from ${filtItems.length} Items`
+		);
 		res.status(200).json({
 			success: true,
-			message: `Category successfully deleted from ${items.length} Items`,
+			message: `Category successfully deleted from ${filtItems.length} Items`,
+		});
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
+};
+
+export const setCategoriesFavItem = async (req, res) => {
+	const { categoryId } = req.params;
+	const { itemId } = req.body;
+
+	try {
+		const category = await Category.findByPk(categoryId);
+		if (!category) {
+			return res.status(404).json({
+				success: false,
+				message: `Category not found`,
+			});
+		}
+
+		const item = await Item.findByPk(itemId);
+		if (!item) {
+			return res.status(404).json({
+				success: false,
+				message: `Item not found`,
+			});
+		}
+
+		category.favoriteItem = itemId;
+		await category.save();
+
+		console.log(`Selected favorite item for ${categoryId}`);
+		res.status(200).json({
+			success: true,
+			message: `Selected favorite item for ${categoryId}`,
 		});
 	} catch (error) {
 		console.error(error.message);
