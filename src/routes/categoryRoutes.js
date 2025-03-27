@@ -18,6 +18,6 @@ router.delete("/:categoryId", deleteCategory);
 router.post("/:categoryId/items", addCategoryToItems);
 router.delete("/:categoryId/items", removeCategoryFromItems);
 
-router.post("/:categoryId/fav-item", setCategoriesFavItem);
+router.post("/:categoryId/fav-item/:itemId", setCategoriesFavItem);
 
 export default router;
