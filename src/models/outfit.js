@@ -12,6 +12,9 @@ const Outfit = sequelize.define("Outfit", {
 		type: DataTypes.DATEONLY,
 		allowNull: false,
 	},
+	description: {
+		type: DataTypes.STRING(511),
+	},
 	image: {
 		type: DataTypes.BLOB,
 		allowNull: true,
