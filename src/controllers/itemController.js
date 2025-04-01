@@ -172,9 +172,10 @@ export const addItemToCategories = async (req, res) => {
 			});
 		}
 
-		for (const category of foundCategories) {
-			await item.addCategory(category);
-		}
+		await Promise.all(
+			foundCategories.map((category) => item.addCategory(category))
+		);
+
 		console.log(
 			`Item successfully added to ${foundCategories.length} Categories`
 		);
@@ -218,6 +219,10 @@ export const removeItemFromCategories = async (req, res) => {
 				message: `Categories not found`,
 			});
 		}
+
+		await Promise.all(
+			foundCategories.map((category) => item.removeCategory(category))
+		);
 
 		for (const category of foundCategories) {
 			await item.removeCategory(category);

@@ -102,9 +102,8 @@ export const addCategoryToItems = async (req, res) => {
 			});
 		}
 
-		for (const item of foundItems) {
-			await category.addItem(item);
-		}
+		await Promise.all(foundItems.map((item) => category.addItem(item)));
+
 		console.log(
 			`Category successfully added to ${foundItems.length} Items`
 		);
@@ -148,9 +147,8 @@ export const removeCategoryFromItems = async (req, res) => {
 			});
 		}
 
-		for (const item of filtItems) {
-			await category.removeItem(item);
-		}
+		await Promise.all(filtItems.map((item) => category.removeItem(item)));
+
 		console.log(
 			`Category successfully deleted from ${filtItems.length} Items`
 		);
