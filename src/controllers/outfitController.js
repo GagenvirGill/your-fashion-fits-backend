@@ -25,7 +25,7 @@ export const getAllOutfits = async (req, res) => {
 
 export const createOutfit = async (req, res) => {
 	try {
-		const { image, dateWorn, description, items } = req.body;
+		const { dateWorn, description, items } = req.body;
 
 		if (!dateWorn) {
 			return res.status(400).json({
@@ -35,7 +35,6 @@ export const createOutfit = async (req, res) => {
 		}
 
 		const newOutfit = await Outfit.create({
-			image: image || null,
 			dateWorn,
 			description: description || null,
 		});
