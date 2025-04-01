@@ -239,5 +239,3 @@ export const removeItemFromCategories = async (req, res) => {
 		});
 	}
 };
-
-// the cascade stuff for the many to many, both on update and on delete
