@@ -22,12 +22,11 @@ export const getAllCategories = async (req, res) => {
 };
 
 export const createCategory = async (req, res) => {
-	const { name, description } = req.body;
+	const { name } = req.body;
 
 	try {
 		const category = await Category.create({
 			name: name,
-			description: description,
 		});
 		console.log(`Category with name: ${name} successfully created`);
 		res.status(201).json({

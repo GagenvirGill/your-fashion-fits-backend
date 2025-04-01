@@ -48,7 +48,6 @@ export const getAllItems = async (req, res) => {
 };
 
 export const createItem = async (req, res) => {
-	const { description } = req.body;
 	let imgPath = null;
 	if (req.file) {
 		imgPath = `/uploads/${req.file.filename}`;
@@ -57,7 +56,6 @@ export const createItem = async (req, res) => {
 	try {
 		const item = await Item.create({
 			imagePath: imgPath,
-			description: description,
 		});
 		console.log(`Item successfully created`);
 		res.status(201).json({
