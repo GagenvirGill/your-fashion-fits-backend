@@ -20,6 +20,8 @@ const Category = sequelize.define("Category", {
 			model: "Items",
 			key: "itemId",
 		},
+		onUpdate: "CASCADE",
+		onDelete: "SET NULL",
 	},
 });
 

@@ -196,7 +196,7 @@ export const addItemToCategories = async (req, res) => {
 export const removeItemFromCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const { categories } = req.body;
-	console.log(req.body);
+
 	try {
 		const item = await Item.findByPk(itemId);
 		if (!item) {

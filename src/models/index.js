@@ -5,26 +5,26 @@ import Outfit from "./outfit.js";
 
 Item.belongsToMany(Category, {
 	through: "ItemHasCategory",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
 });
 
 Item.belongsToMany(Outfit, {
 	through: "OutfitHasItem",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
 });
 
 Category.belongsToMany(Item, {
 	through: "ItemHasCategory",
-});
-
-Category.belongsToMany(Outfit, {
-	through: "OutfitHasCategory",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
 });
 
 Outfit.belongsToMany(Item, {
 	through: "OutfitHasItem",
-});
-
-Outfit.belongsToMany(Category, {
-	through: "OutfitHasCategory",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
 });
 
 export default { Category, Item, Outfit };
