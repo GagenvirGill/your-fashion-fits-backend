@@ -5,7 +5,9 @@ import { Op } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
 	try {
-		const outfits = await Outfit.findAll();
+		const outfits = await Outfit.findAll({
+			order: [["dateWorn", "DESC"]],
+		});
 		console.log(`Retrieved ${outfits.length} Outfits`);
 		res.status(200).json({
 			success: true,
