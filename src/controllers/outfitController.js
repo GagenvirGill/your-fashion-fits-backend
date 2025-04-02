@@ -5,14 +5,42 @@ import { Op } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
 	try {
-		const outfits = await Outfit.findAll({
-			include: [{ model: Item, through: { attributes: [] } }],
-		});
+		const outfits = await Outfit.findAll();
 		console.log(`Retrieved ${outfits.length} Outfits`);
 		res.status(200).json({
 			success: true,
 			message: `Retrieved ${outfits.length} Outfits`,
 			data: outfits,
+		});
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).json({
+			success: false,
+			message: err.message,
+		});
+	}
+};
+
+export const getItemsForAnOutfit = async (req, res) => {
+	try {
+		const { outfitId } = req.params;
+
+		const outfit = await Outfit.findByPk(outfitId, {
+			include: [{ model: Item, through: { attributes: [] } }],
+		});
+
+		if (!outfit) {
+			return res.status(404).json({
+				success: false,
+				message: `Outfit not found`,
+			});
+		}
+
+		console.log(`Retrieved items for outfit worn on ${outfit.dateWorn}`);
+		res.status(200).json({
+			success: true,
+			message: `Retrieved items for outfit worn on ${outfit.dateWorn}`,
+			data: outfit.Items,
 		});
 	} catch (err) {
 		console.error(err.message);
