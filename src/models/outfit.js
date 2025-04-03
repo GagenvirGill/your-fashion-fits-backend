@@ -15,8 +15,8 @@ const Outfit = sequelize.define("Outfit", {
 	description: {
 		type: DataTypes.STRING(511),
 	},
-	image: {
-		type: DataTypes.BLOB,
+	imagePath: {
+		type: DataTypes.STRING,
 		allowNull: true,
 	},
 });

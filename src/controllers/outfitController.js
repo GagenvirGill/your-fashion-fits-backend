@@ -55,6 +55,11 @@ export const getItemsForAnOutfit = async (req, res) => {
 
 export const createOutfit = async (req, res) => {
 	try {
+		let imgPath = null;
+		if (req.file) {
+			imgPath = `/uploads/${req.file.filename}`;
+		}
+
 		const { dateWorn, description, items } = req.body;
 
 		if (!dateWorn) {
@@ -67,6 +72,7 @@ export const createOutfit = async (req, res) => {
 		const newOutfit = await Outfit.create({
 			dateWorn,
 			description: description || null,
+			imagePath: imgPath,
 		});
 
 		let message = `Successfully Created Outfit worn on ${dateWorn}`;
