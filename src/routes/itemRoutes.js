@@ -7,6 +7,7 @@ import {
 	getItemsCategories,
 	addItemToCategories,
 	removeItemFromCategories,
+	getRandomItemFromCategories,
 } from "../controllers/itemController.js";
 import upload from "../middleware/multerFileUpload.js";
 
@@ -19,5 +20,7 @@ router.delete("/:itemId", deleteItem);
 router.get("/:itemId/categories", getItemsCategories);
 router.post("/:itemId/categories", addItemToCategories);
 router.delete("/:itemId/categories", removeItemFromCategories);
+
+router.get("/random", getRandomItemFromCategories);
 
 export default router;

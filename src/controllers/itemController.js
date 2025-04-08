@@ -151,6 +151,7 @@ export const addItemToCategories = async (req, res) => {
 	try {
 		const item = await Item.findByPk(itemId);
 		if (!item) {
+			console.log(`Item not found`);
 			return res.status(404).json({
 				success: false,
 				message: `Item not found`,
@@ -166,6 +167,7 @@ export const addItemToCategories = async (req, res) => {
 		});
 
 		if (foundCategories.length < 1) {
+			console.log(`Categories not found`);
 			return res.status(404).json({
 				success: false,
 				message: `Categories not found`,
@@ -176,9 +178,7 @@ export const addItemToCategories = async (req, res) => {
 			foundCategories.map((category) => item.addCategory(category))
 		);
 
-		console.log(
-			`Item successfully added to ${foundCategories.length} Categories`
-		);
+		console.log(`Item added to ${foundCategories.length} Categories`);
 		res.status(200).json({
 			success: true,
 			message: `Item successfully added to ${foundCategories.length} Categories`,
@@ -199,6 +199,7 @@ export const removeItemFromCategories = async (req, res) => {
 	try {
 		const item = await Item.findByPk(itemId);
 		if (!item) {
+			console.log(`Item not found`);
 			return res.status(404).json({
 				success: false,
 				message: `Item not found`,
@@ -214,6 +215,7 @@ export const removeItemFromCategories = async (req, res) => {
 		});
 
 		if (foundCategories.length < 1) {
+			console.log(`Categories not found`);
 			return res.status(404).json({
 				success: false,
 				message: `Categories not found`,
@@ -227,12 +229,60 @@ export const removeItemFromCategories = async (req, res) => {
 		for (const category of foundCategories) {
 			await item.removeCategory(category);
 		}
-		console.log(
-			`Item successfully deleted from ${foundCategories.length} Categories`
-		);
+		console.log(`Item deleted from ${foundCategories.length} Categories`);
 		res.status(200).json({
 			success: true,
 			message: `Item successfully deleted from ${foundCategories.length} Categories`,
+		});
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({
+			success: false,
+			message: error.message,
+		});
+	}
+};
+
+export const getRandomItemFromCategories = async (req, res) => {
+	try {
+		const { categories } = req.query;
+		console.log(categories);
+
+		if (!categories || categories.length === 0) {
+			console.log("Categories are required to fetch a random item");
+			return res.status(400).json({
+				success: false,
+				message: "Categories are required to fetch a random item",
+			});
+		}
+
+		const items = await Item.findAll({
+			include: {
+				model: Category,
+				where: {
+					categoryId: {
+						[Op.in]: categories,
+					},
+				},
+			},
+		});
+
+		if (items.length === 0) {
+			console.log("No items found for the given categories");
+			return res.status(404).json({
+				success: false,
+				message: "No items found for the given categories",
+			});
+		}
+
+		const randomIndex = Math.floor(Math.random() * items.length);
+		const randomItem = items[randomIndex];
+
+		console.log(`Random item selected: ${randomItem.itemId}`);
+		res.status(200).json({
+			success: true,
+			message: "Random item retrieved successfully",
+			data: randomItem,
 		});
 	} catch (error) {
 		console.error(error.message);
