@@ -15,10 +15,6 @@ const Outfit = sequelize.define("Outfit", {
 	description: {
 		type: DataTypes.STRING(511),
 	},
-	imagePath: {
-		type: DataTypes.STRING,
-		allowNull: true,
-	},
 });
 
 export default Outfit;
