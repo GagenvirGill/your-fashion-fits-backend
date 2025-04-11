@@ -8,7 +8,9 @@ export const getAllItems = async (req, res) => {
 		const { categories } = req.query;
 
 		if (!categories || categories.length === 0) {
-			const items = await Item.findAll();
+			const items = await Item.findAll({
+				attributes: ["itemId", "imagePath"],
+			});
 			console.log(`Retrieved ${items.length} Items`);
 
 			res.status(200).json({
@@ -29,6 +31,7 @@ export const getAllItems = async (req, res) => {
 						attributes: [],
 					},
 				},
+				attributes: ["itemId", "imagePath"],
 			});
 			console.log(`Retrieved ${items.length} Filtered Items`);
 
@@ -116,7 +119,9 @@ export const getItemsCategories = async (req, res) => {
 			include: {
 				model: Category,
 				as: "Categories",
+				attributes: ["categoryId", "name", "favoriteItem"],
 			},
+			attributes: ["itemId", "imagePath"],
 		});
 
 		if (item && item.Categories) {
@@ -264,7 +269,9 @@ export const getRandomItemFromCategories = async (req, res) => {
 						[Op.in]: categories,
 					},
 				},
+				attributes: [],
 			},
+			attributes: ["itemId", "imagePath"],
 		});
 
 		if (items.length === 0) {

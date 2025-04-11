@@ -3,19 +3,27 @@ import Outfit from "../models/outfit.js";
 import Item from "../models/item.js";
 import OutfitTemplate from "../models/outfitTemplate.js";
 import TemplateItem from "../models/templateItem.js";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
 	try {
 		const outfits = await Outfit.findAll({
 			order: [["dateWorn", "DESC"]],
+			attributes: ["outfitId", "dateWorn", "description"],
 			include: [
 				{
 					model: OutfitTemplate,
+					attributes: ["outfitTemplateId"],
 					include: [
 						{
 							model: TemplateItem,
-							include: [{ model: Item }],
+							attributes: ["templateItemId", "orderNum"],
+							include: [
+								{
+									model: Item,
+									attributes: ["itemId", "imagePath"],
+								},
+							],
 						},
 					],
 				},

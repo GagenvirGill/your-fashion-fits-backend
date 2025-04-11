@@ -5,7 +5,9 @@ import { Op } from "sequelize";
 
 export const getAllCategories = async (req, res) => {
 	try {
-		const categories = await Category.findAll();
+		const categories = await Category.findAll({
+			attributes: ["categoryId", "name", "favoriteItem"],
+		});
 		console.log(`Retrieved ${categories.length} Categories`);
 		res.status(200).json({
 			success: true,
