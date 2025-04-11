@@ -12,6 +12,10 @@ const TemplateItem = sequelize.define("TemplateItem", {
 		type: DataTypes.INTEGER,
 		allowNull: false,
 	},
+	itemWeight: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+	},
 });
 
 export default TemplateItem;

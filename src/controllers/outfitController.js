@@ -47,6 +47,7 @@ export const getAllOutfits = async (req, res) => {
 export const createOutfit = async (req, res) => {
 	try {
 		const { dateWorn, description, items } = req.body;
+		console.log(items);
 
 		if (!dateWorn) {
 			return res.status(400).json({
@@ -65,11 +66,12 @@ export const createOutfit = async (req, res) => {
 		});
 
 		await Promise.all(
-			Object.entries(items).map(([key, value]) =>
+			items.map((item) =>
 				TemplateItem.create({
 					outfitTemplateId: outfitTemplate.outfitTemplateId,
-					itemId: value,
-					orderNum: Number(key),
+					itemId: item.itemId,
+					orderNum: item.orderNum,
+					itemWeight: item.itemWeight,
 				})
 			)
 		);
