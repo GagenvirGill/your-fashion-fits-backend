@@ -8,6 +8,10 @@ const OutfitTemplate = sequelize.define("OutfitTemplate", {
 		defaultValue: DataTypes.UUIDV4,
 		primaryKey: true,
 	},
+	totalWeight: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+	},
 });
 
 export default OutfitTemplate;

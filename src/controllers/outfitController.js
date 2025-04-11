@@ -13,11 +13,15 @@ export const getAllOutfits = async (req, res) => {
 			include: [
 				{
 					model: OutfitTemplate,
-					attributes: ["outfitTemplateId"],
+					attributes: ["outfitTemplateId", "totalWeight"],
 					include: [
 						{
 							model: TemplateItem,
-							attributes: ["templateItemId", "orderNum"],
+							attributes: [
+								"templateItemId",
+								"orderNum",
+								"itemWeight",
+							],
 							include: [
 								{
 									model: Item,
@@ -61,8 +65,14 @@ export const createOutfit = async (req, res) => {
 			description: description || null,
 		});
 
+		let totalWeight = 0;
+		items.forEach((item) => {
+			totalWeight += item.itemWeight;
+		});
+
 		const outfitTemplate = await OutfitTemplate.create({
 			outfitId: newOutfit.outfitId,
+			totalWeight: totalWeight,
 		});
 
 		await Promise.all(
