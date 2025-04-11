@@ -1,12 +1,25 @@
 // src/contollers/outfitController.js
 import Outfit from "../models/outfit.js";
 import Item from "../models/item.js";
-import { Op } from "sequelize";
+import OutfitTemplate from "../models/outfitTemplate.js";
+import TemplateItem from "../models/templateItem.js";
+import { Op, where } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
 	try {
 		const outfits = await Outfit.findAll({
 			order: [["dateWorn", "DESC"]],
+			include: [
+				{
+					model: OutfitTemplate,
+					include: [
+						{
+							model: TemplateItem,
+							include: [{ model: Item }],
+						},
+					],
+				},
+			],
 		});
 		console.log(`Retrieved ${outfits.length} Outfits`);
 		res.status(200).json({
