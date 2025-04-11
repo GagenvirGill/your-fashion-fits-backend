@@ -38,11 +38,6 @@ export const getAllOutfits = async (req, res) => {
 
 export const createOutfit = async (req, res) => {
 	try {
-		let imgPath = null;
-		if (req.file) {
-			imgPath = `/uploads/${req.file.filename}`;
-		}
-
 		const { dateWorn, description, items } = req.body;
 
 		if (!dateWorn) {
@@ -55,22 +50,25 @@ export const createOutfit = async (req, res) => {
 		const newOutfit = await Outfit.create({
 			dateWorn,
 			description: description || null,
-			imagePath: imgPath,
 		});
 
-		let message = `Successfully Created Outfit worn on ${dateWorn}`;
+		const outfitTemplate = await OutfitTemplate.create({
+			outfitId: newOutfit.outfitId,
+		});
 
-		if (items && items.length > 0) {
-			const itemInstances = await Item.findAll({
-				where: { id: { [Op.in]: items } },
-			});
-			await newOutfit.addItems(itemInstances);
-			message + ` and added ${itemInstances.length} items to it`;
-		}
+		await Promise.all(
+			Object.entries(items).map(([key, value]) =>
+				TemplateItem.create({
+					outfitTemplateId: outfitTemplate.outfitTemplateId,
+					itemId: value,
+					orderNum: Number(key),
+				})
+			)
+		);
 
 		res.status(201).json({
 			success: true,
-			message: message,
+			message: `Successfully Created Outfit worn on ${dateWorn}`,
 			data: newOutfit,
 		});
 	} catch (err) {

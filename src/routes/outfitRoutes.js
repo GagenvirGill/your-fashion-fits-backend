@@ -7,12 +7,11 @@ import {
 	addItemsToOutfit,
 	removeItemsFromOutfit,
 } from "../controllers/outfitController.js";
-import upload from "../middleware/multerFileUpload.js";
 
 const router = Router();
 
 router.get("/", getAllOutfits);
-router.post("/", upload.single("image"), createOutfit);
+router.post("/", createOutfit);
 router.delete("/:outfitId", deleteOutfit);
 
 router.post("/:outfitId/items", addItemsToOutfit);

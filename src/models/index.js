@@ -30,14 +30,26 @@ TemplateItem.belongsTo(OutfitTemplate, {
 	onDelete: "CASCADE",
 });
 
+Item.hasMany(TemplateItem, {
+	foreignKey: "itemId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+TemplateItem.belongsTo(Item, {
+	foreignKey: "itemId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
 Outfit.hasOne(OutfitTemplate, {
-	foreignKey: "outfitTemplateId",
+	foreignKey: "outfitId",
 	onUpdate: "CASCADE",
 	onDelete: "CASCADE",
 });
 
 OutfitTemplate.belongsTo(Outfit, {
-	foreignKey: "outfitTemplateId",
+	foreignKey: "outfitId",
 	onUpdate: "CASCADE",
 	onDelete: "CASCADE",
 });
