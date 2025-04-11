@@ -36,36 +36,6 @@ export const getAllOutfits = async (req, res) => {
 	}
 };
 
-export const getItemsForAnOutfit = async (req, res) => {
-	try {
-		const { outfitId } = req.params;
-
-		const outfit = await Outfit.findByPk(outfitId, {
-			include: [{ model: Item, through: { attributes: [] } }],
-		});
-
-		if (!outfit) {
-			return res.status(404).json({
-				success: false,
-				message: `Outfit not found`,
-			});
-		}
-
-		console.log(`Retrieved items for outfit worn on ${outfit.dateWorn}`);
-		res.status(200).json({
-			success: true,
-			message: `Retrieved items for outfit worn on ${outfit.dateWorn}`,
-			data: outfit.Items,
-		});
-	} catch (err) {
-		console.error(err.message);
-		res.status(500).json({
-			success: false,
-			message: err.message,
-		});
-	}
-};
-
 export const createOutfit = async (req, res) => {
 	try {
 		let imgPath = null;

@@ -2,7 +2,6 @@
 import { Router } from "express";
 import {
 	getAllOutfits,
-	getItemsForAnOutfit,
 	createOutfit,
 	deleteOutfit,
 	addItemsToOutfit,
@@ -16,7 +15,6 @@ router.get("/", getAllOutfits);
 router.post("/", upload.single("image"), createOutfit);
 router.delete("/:outfitId", deleteOutfit);
 
-router.get("/:outfitId/items", getItemsForAnOutfit);
 router.post("/:outfitId/items", addItemsToOutfit);
 router.delete("/:outfitId/items", removeItemsFromOutfit);
 
