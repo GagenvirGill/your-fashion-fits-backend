@@ -251,28 +251,27 @@ export const removeItemFromCategories = async (req, res) => {
 export const getRandomItemFromCategories = async (req, res) => {
 	try {
 		const { categories } = req.query;
-		console.log(categories);
+
+		let items;
 
 		if (!categories || categories.length === 0) {
-			console.log("Categories are required to fetch a random item");
-			return res.status(400).json({
-				success: false,
-				message: "Categories are required to fetch a random item",
+			items = await Item.findAll({
+				attributes: ["itemId", "imagePath"],
+			});
+		} else {
+			items = await Item.findAll({
+				include: {
+					model: Category,
+					where: {
+						categoryId: {
+							[Op.in]: categories,
+						},
+					},
+					attributes: [],
+				},
+				attributes: ["itemId", "imagePath"],
 			});
 		}
-
-		const items = await Item.findAll({
-			include: {
-				model: Category,
-				where: {
-					categoryId: {
-						[Op.in]: categories,
-					},
-				},
-				attributes: [],
-			},
-			attributes: ["itemId", "imagePath"],
-		});
 
 		if (items.length === 0) {
 			console.log("No items found for the given categories");
