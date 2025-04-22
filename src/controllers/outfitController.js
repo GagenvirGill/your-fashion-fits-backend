@@ -2,6 +2,7 @@
 import Outfit from "../models/outfit.js";
 import Item from "../models/item.js";
 import OutfitTemplate from "../models/outfitTemplate.js";
+import TemplateRow from "../models/templateRow.js";
 import TemplateItem from "../models/templateItem.js";
 import { Op } from "sequelize";
 
@@ -66,8 +67,10 @@ export const createOutfit = async (req, res) => {
 		});
 
 		let totalWeight = 0;
-		items.forEach((item) => {
-			totalWeight += item.itemWeight;
+		items.forEach((itemsRow) => {
+			itemsRow.forEach((item) => {
+				totalWeight += item.itemWeight;
+			});
 		});
 
 		const outfitTemplate = await OutfitTemplate.create({
@@ -75,14 +78,25 @@ export const createOutfit = async (req, res) => {
 			totalWeight: totalWeight,
 		});
 
-		await Promise.all(
-			items.map((item) =>
-				TemplateItem.create({
+		const templateRows = await Promise.all(
+			items.map((_, index) =>
+				TemplateRow.create({
 					outfitTemplateId: outfitTemplate.outfitTemplateId,
-					itemId: item.itemId,
-					orderNum: item.orderNum,
-					itemWeight: item.itemWeight,
+					orderNum: index,
 				})
+			)
+		);
+
+		await Promise.all(
+			templateRows.map((row, rowIdx) =>
+				items[rowIdx].map((currItem, itemIdx) =>
+					TemplateItem.create({
+						templateRowId: row.templateRowId,
+						itemId: currItem.itemId,
+						orderNum: itemIdx,
+						itemWeight: currItem.itemWeight,
+					})
+				)
 			)
 		);
 

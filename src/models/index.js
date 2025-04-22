@@ -4,6 +4,7 @@ import Category from "./category.js";
 import Outfit from "./outfit.js";
 
 import OutfitTemplate from "./outfitTemplate.js";
+import TemplateRow from "./templateRow.js";
 import TemplateItem from "./templateItem.js";
 
 Item.belongsToMany(Category, {
@@ -18,14 +19,26 @@ Category.belongsToMany(Item, {
 	onDelete: "CASCADE",
 });
 
-OutfitTemplate.hasMany(TemplateItem, {
+OutfitTemplate.hasMany(TemplateRow, {
 	foreignKey: "outfitTemplateId",
 	onUpdate: "CASCADE",
 	onDelete: "CASCADE",
 });
 
-TemplateItem.belongsTo(OutfitTemplate, {
+TemplateRow.belongsTo(OutfitTemplate, {
 	foreignKey: "outfitTemplateId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+TemplateRow.hasMany(TemplateItem, {
+	foreignKey: "templateRowId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+TemplateItem.belongsTo(TemplateRow, {
+	foreignKey: "templateRowId",
 	onUpdate: "CASCADE",
 	onDelete: "CASCADE",
 });
@@ -54,4 +67,11 @@ OutfitTemplate.belongsTo(Outfit, {
 	onDelete: "CASCADE",
 });
 
-export default { Category, Item, Outfit, OutfitTemplate, TemplateItem };
+export default {
+	Category,
+	Item,
+	Outfit,
+	OutfitTemplate,
+	TemplateRow,
+	TemplateItem,
+};
