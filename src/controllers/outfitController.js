@@ -17,16 +17,22 @@ export const getAllOutfits = async (req, res) => {
 					attributes: ["outfitTemplateId", "totalWeight"],
 					include: [
 						{
-							model: TemplateItem,
-							attributes: [
-								"templateItemId",
-								"orderNum",
-								"itemWeight",
-							],
+							model: TemplateRow,
+							attributes: ["templateRowId", "orderNum"],
 							include: [
 								{
-									model: Item,
-									attributes: ["itemId", "imagePath"],
+									model: TemplateItem,
+									attributes: [
+										"templateItemId",
+										"orderNum",
+										"itemWeight",
+									],
+									include: [
+										{
+											model: Item,
+											attributes: ["itemId", "imagePath"],
+										},
+									],
 								},
 							],
 						},
@@ -52,7 +58,6 @@ export const getAllOutfits = async (req, res) => {
 export const createOutfit = async (req, res) => {
 	try {
 		const { dateWorn, description, items } = req.body;
-		console.log(items);
 
 		if (!dateWorn) {
 			return res.status(400).json({
@@ -68,9 +73,15 @@ export const createOutfit = async (req, res) => {
 
 		let totalWeight = 0;
 		items.forEach((itemsRow) => {
+			let currMaxWeight = 0;
+
 			itemsRow.forEach((item) => {
-				totalWeight += item.itemWeight;
+				if (item.itemWeight > currMaxWeight) {
+					currMaxWeight = item.itemWeight;
+				}
 			});
+
+			totalWeight += currMaxWeight;
 		});
 
 		const outfitTemplate = await OutfitTemplate.create({
