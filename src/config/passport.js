@@ -12,7 +12,7 @@ passport.use(
 		},
 		async (accessToken, refreshToken, profile, done) => {
 			try {
-				const [user] = User.findOrCreate({
+				const [user, created] = await User.findOrCreate({
 					where: { providerId: profile.id },
 					defaults: {
 						provider: "google",
@@ -21,7 +21,7 @@ passport.use(
 				});
 
 				return done(null, user);
-			} catch {
+			} catch (err) {
 				return done(err);
 			}
 		}

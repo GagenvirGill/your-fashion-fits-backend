@@ -3,6 +3,11 @@ import express from "express";
 import fs from "fs";
 import envConfig from "./config/envConfig.js";
 
+// Import Auth
+import session from "express-session";
+import passport from "passport";
+import "./config/passport.js";
+
 // Import Routers
 import categoryRoutes from "./routes/categoryRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
@@ -15,11 +20,6 @@ import jsonParser from "./middleware/jsonParser.js";
 import urlEncodedParser from "./middleware/urlEncodedParser.js";
 import errorHandler from "./middleware/errorHandler.js";
 import ensureAuth from "./middleware/authenticate.js";
-
-// Import Auth
-import session from "express-session";
-import passport from "passport";
-import "./config/passport.js";
 
 const app = express();
 
