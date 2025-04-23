@@ -12,6 +12,11 @@ const envConfig = {
 	dbPassword: process.env.DB_PASSWORD,
 	dbHost: process.env.DB_HOST,
 	dbPort: process.env.DB_PORT || 5432,
+
+	googleClientId: process.env.GOOGLE_CLIENT_ID,
+	googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+
+	sessionSecret: process.env.SESSION_SECRET,
 };
 
 if (process.env.DB_ENV === "test") {
