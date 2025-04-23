@@ -1,4 +1,6 @@
 // src/models/index.js
+import User from "./user.js";
+
 import Item from "./item.js";
 import Category from "./category.js";
 import Outfit from "./outfit.js";
@@ -6,6 +8,42 @@ import Outfit from "./outfit.js";
 import OutfitTemplate from "./outfitTemplate.js";
 import TemplateRow from "./templateRow.js";
 import TemplateItem from "./templateItem.js";
+
+User.hasMany(Item, {
+	foreignKey: "userId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+Item.belongsTo(User, {
+	foreignKey: "userId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+User.hasMany(Category, {
+	foreignKey: "userId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+Category.belongsTo(User, {
+	foreignKey: "userId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+User.hasMany(Outfit, {
+	foreignKey: "userId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
+
+Outfit.belongsTo(User, {
+	foreignKey: "userId",
+	onUpdate: "CASCADE",
+	onDelete: "CASCADE",
+});
 
 Item.belongsToMany(Category, {
 	through: "ItemHasCategory",
@@ -68,6 +106,7 @@ OutfitTemplate.belongsTo(Outfit, {
 });
 
 export default {
+	User,
 	Category,
 	Item,
 	Outfit,
