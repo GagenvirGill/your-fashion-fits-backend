@@ -4,8 +4,12 @@ import Item from "../models/item.js";
 import { Op } from "sequelize";
 
 export const getAllCategories = async (req, res) => {
+	const userId = req.user.userId;
 	try {
 		const categories = await Category.findAll({
+			where: {
+				userId: userId,
+			},
 			attributes: ["categoryId", "name", "favoriteItem"],
 		});
 		console.log(`Retrieved ${categories.length} Categories`);
@@ -25,9 +29,11 @@ export const getAllCategories = async (req, res) => {
 
 export const createCategory = async (req, res) => {
 	const { name } = req.body;
+	const userId = req.user.userId;
 
 	try {
 		const category = await Category.create({
+			userId: userId,
 			name: name,
 		});
 		console.log(`Category with name: ${name} successfully created`);
@@ -47,10 +53,12 @@ export const createCategory = async (req, res) => {
 
 export const deleteCategory = async (req, res) => {
 	const { categoryId } = req.params;
+	const userId = req.user.userId;
 
 	try {
 		const numAffectedRows = await Category.destroy({
 			where: {
+				userId: userId,
 				categoryId: categoryId,
 			},
 		});
@@ -79,9 +87,15 @@ export const deleteCategory = async (req, res) => {
 export const addCategoryToItems = async (req, res) => {
 	const { categoryId } = req.params;
 	const { items } = req.body;
+	const userId = req.user.userId;
 
 	try {
-		const category = await Category.findByPk(categoryId);
+		const category = await Category.findOne({
+			where: {
+				categoryId: categoryId,
+				userId: userId,
+			},
+		});
 		if (!category) {
 			return res.status(404).json({
 				success: false,
@@ -91,6 +105,7 @@ export const addCategoryToItems = async (req, res) => {
 
 		const foundItems = await Item.findAll({
 			where: {
+				userId: userId,
 				itemId: {
 					[Op.in]: items,
 				},
@@ -125,9 +140,15 @@ export const addCategoryToItems = async (req, res) => {
 export const removeCategoryFromItems = async (req, res) => {
 	const { categoryId } = req.params;
 	const { items } = req.body;
+	const userId = req.user.userId;
 
 	try {
-		const category = await Category.findByPk(categoryId);
+		const category = await Category.findOne({
+			where: {
+				categoryId: categoryId,
+				userId: userId,
+			},
+		});
 		if (!category) {
 			return res.status(404).json({
 				success: false,
@@ -137,6 +158,7 @@ export const removeCategoryFromItems = async (req, res) => {
 
 		const filtItems = await Item.findAll({
 			where: {
+				userId: userId,
 				itemId: {
 					[Op.in]: items,
 				},
@@ -169,9 +191,15 @@ export const removeCategoryFromItems = async (req, res) => {
 
 export const setCategoriesFavItem = async (req, res) => {
 	const { categoryId, itemId } = req.params;
+	const userId = req.user.userId;
 
 	try {
-		const category = await Category.findByPk(categoryId);
+		const category = await Category.findOne({
+			where: {
+				userId: userId,
+				categoryId: categoryId,
+			},
+		});
 		if (!category) {
 			return res.status(404).json({
 				success: false,
@@ -179,7 +207,12 @@ export const setCategoriesFavItem = async (req, res) => {
 			});
 		}
 
-		const item = await Item.findByPk(itemId);
+		const item = await Item.findOne({
+			where: {
+				userId: userId,
+				itemId: itemId,
+			},
+		});
 		if (!item) {
 			return res.status(404).json({
 				success: false,

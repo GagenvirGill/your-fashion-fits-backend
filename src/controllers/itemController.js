@@ -6,9 +6,13 @@ import { Op } from "sequelize";
 export const getAllItems = async (req, res) => {
 	try {
 		const { categories } = req.query;
+		const userId = req.user.userId;
 
 		if (!categories || categories.length === 0) {
 			const items = await Item.findAll({
+				where: {
+					userId: userId,
+				},
 				attributes: ["itemId", "imagePath"],
 			});
 			console.log(`Retrieved ${items.length} Items`);
@@ -20,6 +24,9 @@ export const getAllItems = async (req, res) => {
 			});
 		} else {
 			const items = await Item.findAll({
+				where: {
+					userId: userId,
+				},
 				include: {
 					model: Category,
 					where: {
@@ -55,9 +62,11 @@ export const createItem = async (req, res) => {
 	if (req.file) {
 		imgPath = `/uploads/${req.file.filename}`;
 	}
+	const userId = req.user.userId;
 
 	try {
 		const item = await Item.create({
+			userId: userId,
 			imagePath: imgPath,
 		});
 		console.log(`Item successfully created`);
@@ -77,10 +86,12 @@ export const createItem = async (req, res) => {
 
 export const deleteItem = async (req, res) => {
 	const { itemId } = req.params;
+	const userId = req.user.userId;
 
 	try {
 		const numAffectedRows = await Item.destroy({
 			where: {
+				userId: userId,
 				itemId: {
 					[Op.eq]: itemId,
 				},
@@ -110,10 +121,12 @@ export const deleteItem = async (req, res) => {
 
 export const getItemsCategories = async (req, res) => {
 	const { itemId } = req.params;
+	const userId = req.user.userId;
 
 	try {
 		const item = await Item.findOne({
 			where: {
+				userId: userId,
 				itemId: itemId,
 			},
 			include: {
@@ -152,9 +165,15 @@ export const getItemsCategories = async (req, res) => {
 export const addItemToCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const { categories } = req.body;
+	const userId = req.user.userId;
 
 	try {
-		const item = await Item.findByPk(itemId);
+		const item = await Item.findOne({
+			where: {
+				userId: userId,
+				itemId: itemId,
+			},
+		});
 		if (!item) {
 			console.log(`Item not found`);
 			return res.status(404).json({
@@ -165,6 +184,7 @@ export const addItemToCategories = async (req, res) => {
 
 		const foundCategories = await Category.findAll({
 			where: {
+				userId: userId,
 				categoryId: {
 					[Op.in]: categories,
 				},
@@ -200,9 +220,15 @@ export const addItemToCategories = async (req, res) => {
 export const removeItemFromCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const { categories } = req.body;
+	const userId = req.user.userId;
 
 	try {
-		const item = await Item.findByPk(itemId);
+		const item = await Item.findOne({
+			where: {
+				userId: userId,
+				itemId: itemId,
+			},
+		});
 		if (!item) {
 			console.log(`Item not found`);
 			return res.status(404).json({
@@ -213,6 +239,7 @@ export const removeItemFromCategories = async (req, res) => {
 
 		const foundCategories = await Category.findAll({
 			where: {
+				userId: userId,
 				categoryId: {
 					[Op.in]: categories,
 				},
@@ -251,15 +278,22 @@ export const removeItemFromCategories = async (req, res) => {
 export const getRandomItemFromCategories = async (req, res) => {
 	try {
 		const { categories } = req.query;
+		const userId = req.user.userId;
 
 		let items;
 
 		if (!categories || categories.length === 0) {
 			items = await Item.findAll({
+				where: {
+					userId: userId,
+				},
 				attributes: ["itemId", "imagePath"],
 			});
 		} else {
 			items = await Item.findAll({
+				where: {
+					userId: userId,
+				},
 				include: {
 					model: Category,
 					where: {

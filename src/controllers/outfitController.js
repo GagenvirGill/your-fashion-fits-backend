@@ -7,8 +7,12 @@ import TemplateItem from "../models/templateItem.js";
 import { Op } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
+	const userId = req.user.userId;
 	try {
 		const outfits = await Outfit.findAll({
+			where: {
+				userId: userId,
+			},
 			order: [["dateWorn", "DESC"]],
 			attributes: ["outfitId", "dateWorn", "description"],
 			include: [
@@ -58,6 +62,7 @@ export const getAllOutfits = async (req, res) => {
 export const createOutfit = async (req, res) => {
 	try {
 		const { dateWorn, description, items } = req.body;
+		const userId = req.user.userId;
 
 		if (!dateWorn) {
 			return res.status(400).json({
@@ -67,6 +72,7 @@ export const createOutfit = async (req, res) => {
 		}
 
 		const newOutfit = await Outfit.create({
+			userId: userId,
 			dateWorn,
 			description: description || null,
 		});
@@ -128,9 +134,11 @@ export const createOutfit = async (req, res) => {
 export const deleteOutfit = async (req, res) => {
 	try {
 		const { outfitId } = req.params;
+		const userId = req.user.userId;
 
 		const numAffectedRows = await Outfit.destroy({
 			where: {
+				userId: userId,
 				outfitId: outfitId,
 			},
 		});
