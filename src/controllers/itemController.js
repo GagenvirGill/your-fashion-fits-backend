@@ -2,6 +2,7 @@
 import Item from "../models/item.js";
 import Category from "../models/category.js";
 import { Op } from "sequelize";
+import { r2Upload } from "../config/r2Util.js";
 
 export const getAllItems = async (req, res) => {
 	try {
@@ -60,7 +61,14 @@ export const getAllItems = async (req, res) => {
 export const createItem = async (req, res) => {
 	let imgPath = null;
 	if (req.file) {
-		imgPath = `/uploads/${req.file.filename}`;
+		try {
+			imgPath = await r2Upload(req.file);
+		} catch (err) {
+			console.error("Upload to R2 failed", err);
+			return res
+				.status(500)
+				.json({ success: false, message: "Upload to R2 failed" });
+		}
 	}
 	const userId = req.user.userId;
 
@@ -166,6 +174,8 @@ export const addItemToCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const { categories } = req.body;
 	const userId = req.user.userId;
+
+	console.log(categories);
 
 	try {
 		const item = await Item.findOne({

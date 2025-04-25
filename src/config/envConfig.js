@@ -1,11 +1,9 @@
-// src/config/envConfig.js
+// src/config/envConfig/r2Client.js
 import dotenv from "dotenv";
 dotenv.config();
 
 const envConfig = {
 	serverPort: process.env.SERVER_PORT,
-
-	uploadsFolder: process.env.UPLOADS_FOLDER,
 
 	dbName: process.env.DB_NAME,
 	dbUser: process.env.DB_USER,
@@ -17,6 +15,13 @@ const envConfig = {
 	googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
 
 	sessionSecret: process.env.SESSION_SECRET,
+
+	r2AccessKeyId: process.env.R2_ACCESS_KEY_ID,
+	r2SecretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+	r2BucketName: process.env.R2_BUCKET_NAME,
+	r2AccountId: process.env.R2_ACCOUNT_ID,
+	r2Region: process.env.R2_REGION,
+	r2URL: process.env.R2_URL,
 };
 
 if (process.env.DB_ENV === "test") {

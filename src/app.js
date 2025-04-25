@@ -1,6 +1,5 @@
 // src/app.js
 import express from "express";
-import fs from "fs";
 import envConfig from "./config/envConfig.js";
 
 // Import Auth
@@ -33,18 +32,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const uploadFolder = envConfig.uploadsFolder;
-if (!fs.existsSync(uploadFolder)) {
-	fs.mkdirSync(uploadFolder);
-}
-
 // Middlewares
 app.use(corsMiddleware);
 app.use(jsonParser);
 app.use(urlEncodedParser);
-
-// Uploaded Image Static Access
-app.use("/uploads", express.static(uploadFolder));
 
 // Registered Routes
 app.use("/category", ensureAuth, categoryRoutes);
