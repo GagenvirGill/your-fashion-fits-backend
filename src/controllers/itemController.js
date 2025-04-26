@@ -2,7 +2,8 @@
 import Item from "../models/item.js";
 import Category from "../models/category.js";
 import { Op } from "sequelize";
-import { r2Upload } from "../config/r2Util.js";
+import { r2Upload, r2Delete } from "../config/r2Util.js";
+import envConfig from "../config/envConfig.js";
 
 export const getAllItems = async (req, res) => {
 	try {
@@ -97,6 +98,22 @@ export const deleteItem = async (req, res) => {
 	const userId = req.user.userId;
 
 	try {
+		const item = await Item.findOne({
+			where: {
+				userId: userId,
+				itemId: {
+					[Op.eq]: itemId,
+				},
+			},
+		});
+
+		if (!item) {
+			return res.status(404).json({
+				success: false,
+				message: `Item not found`,
+			});
+		}
+
 		const numAffectedRows = await Item.destroy({
 			where: {
 				userId: userId,
@@ -105,9 +122,16 @@ export const deleteItem = async (req, res) => {
 				},
 			},
 		});
-		console.log(`Item successfully deleted`);
 
 		if (numAffectedRows > 0) {
+			console.log(`Item successfully deleted`);
+
+			if (item.imagePath) {
+				const key = item.imagePath.replace(`${envConfig.r2URL}/`, "");
+				await r2Delete(key);
+				console.log(`File successfully deleted from R2: ${key}`);
+			}
+
 			res.status(200).json({
 				success: true,
 				message: `Item successfully deleted`,

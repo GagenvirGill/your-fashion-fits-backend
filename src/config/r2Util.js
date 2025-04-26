@@ -1,5 +1,5 @@
 // src/config/r2Upload.js
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import r2Client from "./r2Client.js";
 import { extname } from "path";
 import envConfig from "./envConfig.js";
@@ -20,4 +20,13 @@ export const r2Upload = async (file) => {
 	await r2Client.send(new PutObjectCommand(uploadParams));
 
 	return `${envConfig.r2URL}/${key}`;
+};
+
+export const r2Delete = async (key) => {
+	const deleteParams = {
+		Bucket: envConfig.r2BucketName,
+		Key: key,
+	};
+
+	await r2Client.send(new DeleteObjectCommand(deleteParams));
 };
