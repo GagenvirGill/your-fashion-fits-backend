@@ -5,6 +5,12 @@ import { Op } from "sequelize";
 
 export const getAllCategories = async (req, res) => {
 	const userId = req.user.userId;
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 	try {
 		const categories = await Category.findAll({
 			where: {
@@ -31,6 +37,19 @@ export const createCategory = async (req, res) => {
 	const { name } = req.body;
 	const userId = req.user.userId;
 
+	if (!name) {
+		return res.status(400).json({
+			success: false,
+			message: "Category name is required",
+		});
+	}
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
+
 	try {
 		const category = await Category.create({
 			userId: userId,
@@ -54,6 +73,19 @@ export const createCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
 	const { categoryId } = req.params;
 	const userId = req.user.userId;
+
+	if (!categoryId) {
+		return res.status(400).json({
+			success: false,
+			message: "Category ID is required",
+		});
+	}
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	try {
 		const numAffectedRows = await Category.destroy({
@@ -88,6 +120,25 @@ export const addCategoryToItems = async (req, res) => {
 	const { categoryId } = req.params;
 	const { items } = req.body;
 	const userId = req.user.userId;
+
+	if (!categoryId) {
+		return res.status(400).json({
+			success: false,
+			message: "Category ID is required",
+		});
+	}
+	if (!items || !Array.isArray(items) || items.length === 0) {
+		return res.status(400).json({
+			success: false,
+			message: "Items array is required and cannot be empty",
+		});
+	}
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	try {
 		const category = await Category.findOne({
@@ -142,6 +193,25 @@ export const removeCategoryFromItems = async (req, res) => {
 	const { items } = req.body;
 	const userId = req.user.userId;
 
+	if (!categoryId) {
+		return res.status(400).json({
+			success: false,
+			message: "Category ID is required",
+		});
+	}
+	if (!items || !Array.isArray(items) || items.length === 0) {
+		return res.status(400).json({
+			success: false,
+			message: "Items array is required and cannot be empty",
+		});
+	}
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
+
 	try {
 		const category = await Category.findOne({
 			where: {
@@ -192,6 +262,25 @@ export const removeCategoryFromItems = async (req, res) => {
 export const setCategoriesFavItem = async (req, res) => {
 	const { categoryId, itemId } = req.params;
 	const userId = req.user.userId;
+
+	if (!categoryId) {
+		return res.status(400).json({
+			success: false,
+			message: "Category ID is required",
+		});
+	}
+	if (!itemId) {
+		return res.status(400).json({
+			success: false,
+			message: "Item ID is required",
+		});
+	}
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	try {
 		const category = await Category.findOne({

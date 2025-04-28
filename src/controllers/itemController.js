@@ -10,6 +10,13 @@ export const getAllItems = async (req, res) => {
 		const { categories } = req.query;
 		const userId = req.user.userId;
 
+		if (!userId) {
+			return res.status(400).json({
+				success: false,
+				message: "User ID is required",
+			});
+		}
+
 		if (!categories || categories.length === 0) {
 			const items = await Item.findAll({
 				where: {
@@ -71,7 +78,14 @@ export const createItem = async (req, res) => {
 				.json({ success: false, message: "Upload to R2 failed" });
 		}
 	}
+
 	const userId = req.user.userId;
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	try {
 		const item = await Item.create({
@@ -96,6 +110,20 @@ export const createItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
 	const { itemId } = req.params;
 	const userId = req.user.userId;
+
+	if (!itemId) {
+		return res.status(400).json({
+			success: false,
+			message: "Item ID is required",
+		});
+	}
+
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	try {
 		const item = await Item.findOne({
@@ -155,6 +183,20 @@ export const getItemsCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const userId = req.user.userId;
 
+	if (!itemId) {
+		return res.status(400).json({
+			success: false,
+			message: "Item ID is required",
+		});
+	}
+
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
+
 	try {
 		const item = await Item.findOne({
 			where: {
@@ -198,6 +240,27 @@ export const addItemToCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const { categories } = req.body;
 	const userId = req.user.userId;
+
+	if (!itemId) {
+		return res.status(400).json({
+			success: false,
+			message: "Item ID is required",
+		});
+	}
+
+	if (!categories || !Array.isArray(categories) || categories.length === 0) {
+		return res.status(400).json({
+			success: false,
+			message: "Categories are required",
+		});
+	}
+
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	console.log(categories);
 
@@ -255,6 +318,27 @@ export const removeItemFromCategories = async (req, res) => {
 	const { itemId } = req.params;
 	const { categories } = req.body;
 	const userId = req.user.userId;
+
+	if (!itemId) {
+		return res.status(400).json({
+			success: false,
+			message: "Item ID is required",
+		});
+	}
+
+	if (!categories || !Array.isArray(categories) || categories.length === 0) {
+		return res.status(400).json({
+			success: false,
+			message: "Categories are required",
+		});
+	}
+
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
 
 	try {
 		const item = await Item.findOne({
@@ -314,9 +398,20 @@ export const getRandomItemFromCategories = async (req, res) => {
 		const { categories } = req.query;
 		const userId = req.user.userId;
 
+		if (!userId) {
+			return res.status(400).json({
+				success: false,
+				message: "User ID is required",
+			});
+		}
+
 		let items;
 
-		if (!categories || categories.length === 0) {
+		if (
+			!categories ||
+			!Array.isArray(categories) ||
+			categories.length === 0
+		) {
 			items = await Item.findAll({
 				where: {
 					userId: userId,

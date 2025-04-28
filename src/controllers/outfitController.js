@@ -8,6 +8,13 @@ import { Op } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
 	const userId = req.user.userId;
+	if (!userId) {
+		return res.status(400).json({
+			success: false,
+			message: "User ID is required",
+		});
+	}
+
 	try {
 		const outfits = await Outfit.findAll({
 			where: {
@@ -63,6 +70,13 @@ export const createOutfit = async (req, res) => {
 	try {
 		const { dateWorn, description, items } = req.body;
 		const userId = req.user.userId;
+
+		if (!userId) {
+			return res.status(400).json({
+				success: false,
+				message: "User ID is required",
+			});
+		}
 
 		if (!dateWorn) {
 			return res.status(400).json({
@@ -135,6 +149,20 @@ export const deleteOutfit = async (req, res) => {
 	try {
 		const { outfitId } = req.params;
 		const userId = req.user.userId;
+
+		if (!userId) {
+			return res.status(400).json({
+				success: false,
+				message: "User ID is required",
+			});
+		}
+
+		if (!outfitId) {
+			return res.status(400).json({
+				success: false,
+				message: "Outfit ID is required",
+			});
+		}
 
 		const numAffectedRows = await Outfit.destroy({
 			where: {
