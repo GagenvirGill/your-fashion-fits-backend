@@ -11,6 +11,12 @@ const envConfig = {
 	dbHost: process.env.DB_HOST,
 	dbPort: process.env.DB_PORT || 5432,
 
+	supabaseHost: process.env.SUPABASE_HOST,
+	supabasePort: process.env.SUPABASE_PORT,
+	supabaseDb: process.env.SUPABASE_DB,
+	supabasePassword: process.env.SUPABASE_PASSWORD,
+	supabaseUser: process.env.SUPABASE_USER,
+
 	googleClientId: process.env.GOOGLE_CLIENT_ID,
 	googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
 

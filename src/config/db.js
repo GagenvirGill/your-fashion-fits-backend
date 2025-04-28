@@ -4,11 +4,11 @@ import envConfig from "./envConfig.js";
 
 const sequelize = new Sequelize({
 	dialect: "postgres",
-	host: envConfig.dbHost,
-	username: envConfig.dbUser,
-	password: envConfig.dbPassword,
-	database: envConfig.dbName,
-	port: envConfig.dbPort,
+	host: envConfig.supabaseHost,
+	username: envConfig.supabaseUser,
+	password: envConfig.supabasePassword,
+	database: envConfig.supabaseDb,
+	port: envConfig.supabasePort,
 	logging: false,
 });
 
