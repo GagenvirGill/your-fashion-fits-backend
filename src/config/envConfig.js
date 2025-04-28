@@ -28,6 +28,8 @@ const envConfig = {
 	r2AccountId: process.env.R2_ACCOUNT_ID,
 	r2Region: process.env.R2_REGION,
 	r2URL: process.env.R2_URL,
+
+	backendUrl: process.env.BACKEND_URL,
 };
 
 if (process.env.DB_ENV === "test") {
