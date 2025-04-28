@@ -15,25 +15,12 @@ router.get(
 	"/google/callback",
 	passport.authenticate("google", {
 		failureRedirect: "http://localhost:5173/",
-		session: true,
+		session: false,
 	}),
 	(req, res) => {
-		res.redirect("http://localhost:5173/home");
+		const { token } = req.user;
+		res.redirect(`http://localhost:5173/home?token=${token}`);
 	}
 );
-
-router.get("/logout", (req, res) => {
-	req.logout(() => {
-		res.redirect("http://localhost:5173/");
-	});
-});
-
-router.get("/check", (req, res) => {
-	if (req.isAuthenticated()) {
-		res.json({ loggedIn: true });
-	} else {
-		res.json({ loggedIn: false });
-	}
-});
 
 export default router;

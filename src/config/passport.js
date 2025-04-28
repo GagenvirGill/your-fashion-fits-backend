@@ -1,5 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import envConfig from "./envConfig.js";
 
@@ -20,23 +21,16 @@ passport.use(
 					},
 				});
 
-				return done(null, user);
+				const token = jwt.sign(
+					{ userId: user.userId, email: user.email },
+					envConfig.jwtSecret,
+					{ expiresIn: "1h" }
+				);
+
+				return done(null, { user, token });
 			} catch (err) {
 				return done(err);
 			}
 		}
 	)
 );
-
-passport.serializeUser((user, done) => {
-	done(null, user.userId);
-});
-
-passport.deserializeUser(async (id, done) => {
-	try {
-		const user = await User.findByPk(id);
-		done(null, user);
-	} catch (err) {
-		done(err);
-	}
-});
