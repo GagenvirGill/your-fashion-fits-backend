@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 import envConfig from "../config/envConfig.js";
 
-const authenticateJWT = (req, res, next) => {
+const authenticateJwt = (req, res, next) => {
 	const token = req.headers.authorization?.split(" ")[1];
 
 	if (!token) {
@@ -16,9 +16,9 @@ const authenticateJWT = (req, res, next) => {
 				.json({ message: "Invalid or expired token" });
 		}
 
-		req.user = { userId: decoded.sub };
+		req.user = decoded;
 		next();
 	});
 };
 
-export default authenticateJWT;
+export default authenticateJwt;

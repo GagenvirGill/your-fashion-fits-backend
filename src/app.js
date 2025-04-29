@@ -1,6 +1,5 @@
 // src/app.js
 import express from "express";
-import envConfig from "./config/envConfig.js";
 
 // Import Auth
 import passport from "passport";
