@@ -14,7 +14,7 @@ router.get(
 router.get(
 	"/google/callback",
 	passport.authenticate("google", {
-		failureRedirect: "http://localhost:5173/",
+		failureRedirect: "https://your-fashion-fits-frontend.vercel.app/",
 		session: false,
 	}),
 	(req, res) => {
@@ -25,7 +25,7 @@ router.get(
 					<script>
 						window.opener.postMessage(
 							{ token: "${token}" },
-							"http://localhost:5173"
+							"https://your-fashion-fits-frontend.vercel.app/"
 						);
 						window.close();
 					</script>

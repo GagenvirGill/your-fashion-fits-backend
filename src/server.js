@@ -12,9 +12,7 @@ const startServer = async () => {
 		console.log("Registered models:", Object.keys(sequelize.models));
 
 		app.listen(envConfig.serverPort, () => {
-			console.log(
-				`Server is running on http://localhost:${envConfig.serverPort}`
-			);
+			console.log(`Server is running on port ${envConfig.serverPort}`);
 		});
 	} catch (error) {
 		console.error("Failed to start server:", error.message);

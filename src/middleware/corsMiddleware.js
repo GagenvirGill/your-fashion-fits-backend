@@ -2,7 +2,7 @@
 import cors from "cors";
 
 const corsMiddleware = cors({
-	origin: "http://localhost:5173",
+	origin: "https://your-fashion-fits-frontend.vercel.app/",
 	credentials: true,
 	allowedHeaders: ["Content-Type", "Authorization"],
 });
