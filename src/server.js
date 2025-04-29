@@ -7,7 +7,7 @@ import "./models/index.js";
 const startServer = async () => {
 	try {
 		console.log("Models Created, starting Sequelize Sync");
-		await sequelize.sync({ alter: true });
+		await sequelize.sync();
 		console.log("Sequelize Sync Successful");
 		console.log("Registered models:", Object.keys(sequelize.models));
 
