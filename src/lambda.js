@@ -2,13 +2,12 @@
 import serverlessExpress from "@codegenie/serverless-express";
 import app from "./app.js";
 import sequelize from "./config/db.js";
-import envConfig from "./config/envConfig.js";
 import "./models/index.js";
 
 const initializeDatabase = async () => {
 	try {
 		console.log("Models Created, starting Sequelize Sync");
-		await sequelize.sync({ alter: true });
+		await sequelize.sync();
 		console.log("Sequelize Sync Successful");
 		console.log("Registered models:", Object.keys(sequelize.models));
 	} catch (error) {
