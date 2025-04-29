@@ -19,7 +19,19 @@ router.get(
 	}),
 	(req, res) => {
 		const { token } = req.user;
-		res.redirect(`http://localhost:5173/home?token=${token}`);
+		res.send(`
+			<html>
+				<body>
+					<script>
+						window.opener.postMessage(
+							{ token: "${token}" },
+							"http://localhost:5173"
+						);
+						window.close();
+					</script>
+				</body>
+			</html>
+		`);
 	}
 );
 
