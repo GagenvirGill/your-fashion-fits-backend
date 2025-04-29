@@ -20,16 +20,7 @@ import errorHandler from "./middleware/errorHandler.js";
 import authenticateJwt from "./middleware/authenticateJwt.js";
 
 const app = express();
-
-app.use(
-	session({
-		secret: envConfig.sessionSecret,
-		resave: false,
-		saveUninitialized: false,
-	})
-);
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Middlewares
 app.use(corsMiddleware);

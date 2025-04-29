@@ -20,8 +20,6 @@ const envConfig = {
 	googleClientId: process.env.GOOGLE_CLIENT_ID,
 	googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
 
-	sessionSecret: process.env.SESSION_SECRET,
-
 	r2AccessKeyId: process.env.R2_ACCESS_KEY_ID,
 	r2SecretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
 	r2BucketName: process.env.R2_BUCKET_NAME,
