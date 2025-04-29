@@ -3,7 +3,6 @@ import express from "express";
 import envConfig from "./config/envConfig.js";
 
 // Import Auth
-import session from "express-session";
 import passport from "passport";
 import "./config/passport.js";
 
@@ -18,7 +17,7 @@ import corsMiddleware from "./middleware/corsMiddleware.js";
 import jsonParser from "./middleware/jsonParser.js";
 import urlEncodedParser from "./middleware/urlEncodedParser.js";
 import errorHandler from "./middleware/errorHandler.js";
-import ensureAuth from "./middleware/authenticate.js";
+import authenticateJwt from "./middleware/authenticateJwt.js";
 
 const app = express();
 
@@ -38,9 +37,9 @@ app.use(jsonParser);
 app.use(urlEncodedParser);
 
 // Registered Routes
-app.use("/category", ensureAuth, categoryRoutes);
-app.use("/item", ensureAuth, itemRoutes);
-app.use("/outfit", ensureAuth, outfitRoutes);
+app.use("/category", authenticateJwt, categoryRoutes);
+app.use("/item", authenticateJwt, itemRoutes);
+app.use("/outfit", authenticateJwt, outfitRoutes);
 app.use("/auth", authRoutes);
 
 // Middleware Error Handler
