@@ -26,7 +26,7 @@ router.get(
 					<script>
 						window.opener.postMessage(
 							{ token: "${token}" },
-							"${envConfig.frontendUrl}"
+							"https://${envConfig.frontendUrl}"
 						);
 						window.close();
 					</script>
