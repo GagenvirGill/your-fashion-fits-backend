@@ -1,7 +1,7 @@
 // src/routes/authRoutes.js
 import { Router } from "express";
 import passport from "passport";
-import envConfig from "../config/envConfig";
+import envConfig from "../config/envConfig.js";
 
 const router = Router();
 
