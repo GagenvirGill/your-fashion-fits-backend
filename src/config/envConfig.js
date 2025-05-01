@@ -30,6 +30,8 @@ const envConfig = {
 	backendUrl: process.env.BACKEND_URL,
 
 	jwtSecret: process.env.JWT_SECRET,
+
+	frontendUrl: process.env.FRONTEND_URL,
 };
 
 if (process.env.DB_ENV === "test") {

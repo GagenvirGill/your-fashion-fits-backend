@@ -1,6 +1,7 @@
 // src/routes/authRoutes.js
 import { Router } from "express";
 import passport from "passport";
+import envConfig from "../config/envConfig";
 
 const router = Router();
 
@@ -14,7 +15,7 @@ router.get(
 router.get(
 	"/google/callback",
 	passport.authenticate("google", {
-		failureRedirect: "https://your-fashion-fits-frontend.vercel.app",
+		failureRedirect: envConfig.frontendUrl,
 		session: false,
 	}),
 	(req, res) => {
@@ -25,7 +26,7 @@ router.get(
 					<script>
 						window.opener.postMessage(
 							{ token: "${token}" },
-							"https://your-fashion-fits-frontend.vercel.app"
+							${envConfig.frontendUrl}
 						);
 						window.close();
 					</script>
