@@ -4,7 +4,6 @@ import Item from "../models/item.js";
 import OutfitTemplate from "../models/outfitTemplate.js";
 import TemplateRow from "../models/templateRow.js";
 import TemplateItem from "../models/templateItem.js";
-import { Op } from "sequelize";
 
 export const getAllOutfits = async (req, res) => {
 	const userId = req.user.userId;
@@ -41,7 +40,11 @@ export const getAllOutfits = async (req, res) => {
 									include: [
 										{
 											model: Item,
-											attributes: ["itemId", "imagePath"],
+											attributes: [
+												"itemId",
+												"imagePath",
+												"imageWidth",
+											],
 										},
 									],
 								},

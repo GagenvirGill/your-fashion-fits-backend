@@ -12,6 +12,10 @@ const Item = sequelize.define("Item", {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
+	imageWidth: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+	},
 });
 
 export default Item;

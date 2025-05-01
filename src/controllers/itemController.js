@@ -22,7 +22,7 @@ export const getAllItems = async (req, res) => {
 				where: {
 					userId: userId,
 				},
-				attributes: ["itemId", "imagePath"],
+				attributes: ["itemId", "imagePath", "imageWidth"],
 			});
 			console.log(`Retrieved ${items.length} Items`);
 
@@ -47,7 +47,7 @@ export const getAllItems = async (req, res) => {
 						attributes: [],
 					},
 				},
-				attributes: ["itemId", "imagePath"],
+				attributes: ["itemId", "imagePath", "imageWidth"],
 			});
 			console.log(`Retrieved ${items.length} Filtered Items`);
 
@@ -67,7 +67,7 @@ export const getAllItems = async (req, res) => {
 };
 
 export const createItem = async (req, res) => {
-	let imgPath = null;
+	let imgPath;
 	if (req.file) {
 		try {
 			imgPath = await r2Upload(req.file);
@@ -77,10 +77,28 @@ export const createItem = async (req, res) => {
 				.status(500)
 				.json({ success: false, message: "Upload to R2 failed" });
 		}
+	} else {
+		console.log("Image is required");
+		return res.status(400).json({
+			success: false,
+			message: "Image is required",
+		});
+	}
+
+	let imgWidth;
+	if (req.imageWidth) {
+		imgWidth = req.imageWidth;
+	} else {
+		console.log("Image Width is required");
+		return res.status(400).json({
+			success: false,
+			message: "Image Width is required",
+		});
 	}
 
 	const userId = req.user.userId;
 	if (!userId) {
+		console.log("User ID is required");
 		return res.status(400).json({
 			success: false,
 			message: "User ID is required",
@@ -91,6 +109,7 @@ export const createItem = async (req, res) => {
 		const item = await Item.create({
 			userId: userId,
 			imagePath: imgPath,
+			imageWidth: imgWidth,
 		});
 		console.log(`Item successfully created`);
 		res.status(201).json({
@@ -416,7 +435,7 @@ export const getRandomItemFromCategories = async (req, res) => {
 				where: {
 					userId: userId,
 				},
-				attributes: ["itemId", "imagePath"],
+				attributes: ["itemId", "imagePath", "imageWidth"],
 			});
 		} else {
 			items = await Item.findAll({
@@ -432,7 +451,7 @@ export const getRandomItemFromCategories = async (req, res) => {
 					},
 					attributes: [],
 				},
-				attributes: ["itemId", "imagePath"],
+				attributes: ["itemId", "imagePath", "imageWidth"],
 			});
 		}
 
