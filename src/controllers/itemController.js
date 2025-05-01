@@ -85,6 +85,8 @@ export const createItem = async (req, res) => {
 		});
 	}
 
+	console.log(req.imageDimension);
+
 	let imgWidth;
 	if (req.imageWidth) {
 		imgWidth = req.imageWidth;

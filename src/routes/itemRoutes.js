@@ -10,11 +10,12 @@ import {
 	getRandomItemFromCategories,
 } from "../controllers/itemController.js";
 import upload from "../middleware/multerFileUpload.js";
+import imageDimensions from "../middleware/imageDimensions.js";
 
 const router = Router();
 
 router.get("/", getAllItems);
-router.post("/", upload.single("image"), createItem);
+router.post("/", upload.single("image"), imageDimensions, createItem);
 router.delete("/:itemId", deleteItem);
 
 router.get("/:itemId/categories", getItemsCategories);
