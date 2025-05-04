@@ -32,6 +32,8 @@ const envConfig = {
 	jwtSecret: process.env.JWT_SECRET,
 
 	frontendUrl: process.env.FRONTEND_URL,
+
+	healthToken: process.env.HEALTH_TOKEN,
 };
 
 if (process.env.DB_ENV === "test") {

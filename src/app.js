@@ -10,6 +10,7 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import itemRoutes from "./routes/itemRoutes.js";
 import outfitRoutes from "./routes/outfitRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import serverUptimeRoutes from "./routes/serverUptimeRoutes.js";
 
 // Import Middleware Modules
 import corsMiddleware from "./middleware/corsMiddleware.js";
@@ -31,6 +32,7 @@ app.use("/category", authenticateJwt, categoryRoutes);
 app.use("/item", authenticateJwt, itemRoutes);
 app.use("/outfit", authenticateJwt, outfitRoutes);
 app.use("/auth", authRoutes);
+app.use("/health", serverUptimeRoutes);
 
 // Middleware Error Handler
 app.use(errorHandler);
