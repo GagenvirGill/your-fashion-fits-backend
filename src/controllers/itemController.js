@@ -239,6 +239,7 @@ export const getItemsCategories = async (req, res) => {
 				model: Category,
 				as: "Categories",
 				attributes: ["categoryId", "name", "favoriteItem"],
+				order: [["createdAt", "ASC"]],
 			},
 			attributes: ["itemId", "imagePath"],
 		});

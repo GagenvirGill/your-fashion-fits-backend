@@ -17,6 +17,7 @@ export const getAllCategories = async (req, res) => {
 				userId: userId,
 			},
 			attributes: ["categoryId", "name", "favoriteItem"],
+			order: [["createdAt", "ASC"]],
 		});
 		console.log(`Retrieved ${categories.length} Categories`);
 		res.status(200).json({
