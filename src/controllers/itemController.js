@@ -22,7 +22,12 @@ export const getAllItems = async (req, res) => {
 				where: {
 					userId: userId,
 				},
-				attributes: ["itemId", "imagePath", "imageWidth"],
+				attributes: [
+					"itemId",
+					"imagePath",
+					"imageWidth",
+					"imageHeight",
+				],
 			});
 			console.log(`Retrieved ${items.length} Items`);
 
@@ -47,7 +52,12 @@ export const getAllItems = async (req, res) => {
 						attributes: [],
 					},
 				},
-				attributes: ["itemId", "imagePath", "imageWidth"],
+				attributes: [
+					"itemId",
+					"imagePath",
+					"imageWidth",
+					"imageHeight",
+				],
 			});
 			console.log(`Retrieved ${items.length} Filtered Items`);
 
@@ -86,13 +96,15 @@ export const createItem = async (req, res) => {
 	}
 
 	let imgWidth;
-	if (req.imageDimensions && req.imageDimensions.width) {
+	let imgHeight;
+	if (req.imageDimensions) {
 		imgWidth = req.imageDimensions.width;
+		imgHeight = req.imageDimensions.height;
 	} else {
-		console.log("Image Width is required");
+		console.log("Image Dimensions are required");
 		return res.status(400).json({
 			success: false,
-			message: "Image Width is required",
+			message: "Image Dimensions are required",
 		});
 	}
 
@@ -110,6 +122,7 @@ export const createItem = async (req, res) => {
 			userId: userId,
 			imagePath: imgPath,
 			imageWidth: imgWidth,
+			imageHeight: imgHeight,
 		});
 		console.log(`Item successfully created`);
 		res.status(201).json({
@@ -435,7 +448,12 @@ export const getRandomItemFromCategories = async (req, res) => {
 				where: {
 					userId: userId,
 				},
-				attributes: ["itemId", "imagePath", "imageWidth"],
+				attributes: [
+					"itemId",
+					"imagePath",
+					"imageWidth",
+					"imageHeight",
+				],
 			});
 		} else {
 			items = await Item.findAll({
@@ -451,7 +469,12 @@ export const getRandomItemFromCategories = async (req, res) => {
 					},
 					attributes: [],
 				},
-				attributes: ["itemId", "imagePath", "imageWidth"],
+				attributes: [
+					"itemId",
+					"imagePath",
+					"imageWidth",
+					"imageHeight",
+				],
 			});
 		}
 

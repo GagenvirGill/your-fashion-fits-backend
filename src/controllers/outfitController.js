@@ -44,6 +44,7 @@ export const getAllOutfits = async (req, res) => {
 												"itemId",
 												"imagePath",
 												"imageWidth",
+												"imageHeight",
 											],
 										},
 									],

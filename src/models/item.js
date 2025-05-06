@@ -16,6 +16,10 @@ const Item = sequelize.define("Item", {
 		type: DataTypes.INTEGER,
 		allowNull: false,
 	},
+	imageHeight: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+	},
 });
 
 export default Item;
