@@ -24,10 +24,18 @@ router.get(
 			<html>
 				<body>
 					<script>
-						window.opener.postMessage(
-							{ token: "${token}" },
-							"${envConfig.frontendUrl}"
-						);
+						if (window.opener) {
+							window.opener.postMessage(
+								{ token: "${token}" },
+								"${envConfig.frontendUrl}"
+							);
+
+							setTimeout(() => {
+                    			window.close(); // Close the pop-up window
+                			}, 500);
+						} else {
+						 	console.error("No opener window found.");
+						}
 						window.close();
 					</script>
 				</body>
