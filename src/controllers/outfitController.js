@@ -195,3 +195,92 @@ export const deleteOutfit = async (req, res) => {
 		});
 	}
 };
+
+export const searchOutfits = async (req, res) => {
+	try {
+		const userId = req.user.userId;
+
+		if (!userId) {
+			return res.status(400).json({
+				success: false,
+				message: "User ID is required",
+			});
+		}
+
+		const { query } = req.query;
+
+		if (!query || query.trim() === "") {
+			return res.status(400).json({
+				success: false,
+				message: "A Query is Required",
+			});
+		}
+
+		const allOutfits = await Outfit.findAll({
+			where: {
+				userId: userId,
+			},
+			order: [["dateWorn", "DESC"]],
+			attributes: ["outfitId", "dateWorn", "description"],
+			include: [
+				{
+					model: OutfitTemplate,
+					attributes: ["outfitTemplateId", "totalWeight"],
+					include: [
+						{
+							model: TemplateRow,
+							attributes: ["templateRowId", "orderNum"],
+							include: [
+								{
+									model: TemplateItem,
+									attributes: [
+										"templateItemId",
+										"orderNum",
+										"itemWeight",
+									],
+									include: [
+										{
+											model: Item,
+											attributes: [
+												"itemId",
+												"imagePath",
+												"imageWidth",
+												"imageHeight",
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+			],
+		});
+
+		const terms = query.trim().toLowerCase().split(/\s+/);
+		const result = [];
+
+		for (const outfit of allOutfits) {
+			const allTermsPresent = terms.every((term) =>
+				(outfit.description || "").toLowerCase().includes(term)
+			);
+
+			if (allTermsPresent) {
+				result.push(outfit);
+			}
+		}
+
+		console.log(`Retrieved ${result.length} Search Queried Outfits`);
+		res.status(200).json({
+			success: true,
+			message: `Retrieved ${result.length} Search Queried Outfits`,
+			data: result,
+		});
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).json({
+			success: false,
+			message: err.message,
+		});
+	}
+};
