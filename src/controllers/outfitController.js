@@ -261,11 +261,11 @@ export const searchOutfits = async (req, res) => {
 		const result = [];
 
 		for (const outfit of allOutfits) {
-			const allTermsPresent = terms.every((term) =>
+			const oneTermPresent = terms.some((term) =>
 				(outfit.description || "").toLowerCase().includes(term)
 			);
 
-			if (allTermsPresent) {
+			if (oneTermPresent) {
 				result.push(outfit);
 			}
 		}
