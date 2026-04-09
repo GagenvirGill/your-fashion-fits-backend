@@ -34,6 +34,8 @@ const envConfig = {
 	frontendUrl: process.env.FRONTEND_URL,
 
 	healthToken: process.env.HEALTH_TOKEN,
+
+	apiKey: process.env.API_KEY,
 };
 
 if (process.env.DB_ENV === "test") {
